@@ -13,3 +13,17 @@ span {
     flex-direction: column;
     gap: 15px;
 }
+
+.task-third form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: fit-content;
+    font-size: 18px;
+}
+
+#sendButton {
+    width: fit-content;
+    padding: 10px 20px;
+    font-weight: bold;
+}

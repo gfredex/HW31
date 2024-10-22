@@ -203,3 +203,46 @@ class MyButton extends HTMLElement {
     }
 }
 customElements.define('my-button', MyButton);
+
+// --------------Task3------------------------------------
+
+const form3 = document.getElementById('formThird');
+const userName3 = document.getElementById('userName');
+const userPassword = document.getElementById('userPassword');
+const msgUser = document.getElementById('msg-user');
+const msgPassword = document.getElementById('msg-password');
+const regexPassword3 = /(?=.*[0-9])(?=.*[!@#$%^&*.+-])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*.+-]{6,}/g;
+
+form3.addEventListener('submit', event => {
+    event.preventDefault();
+    let indexSend = 0;
+
+    if (userName3.value.trim().length < 3) {
+        userName3.style.borderColor = '#ff3f3f';
+        msgUser.style.color = '#ff3f3f';
+        msgUser.textContent = 'Нужно имя длинее 3х символов';
+    } else {
+        msgUser.style.color = 'green';
+        msgUser.innerHTML = '&#10004;';
+        userName3.style.borderColor = 'green';
+        indexSend++;
+    }
+
+    if (userPassword.value.trim().length < 6) {
+        userPassword.style.borderColor = '#ff3f3f';
+        msgPassword.style.color = '#ff3f3f';
+        msgPassword.textContent = 'Нужно минимум 6 символов';
+    } else if (!userPassword.value.trim().match(regexPassword3)) {
+        msgPassword.style.color = '#ff3f3f';
+        msgPassword.textContent = 'Не верный формат пароля';
+    } else {
+        userPassword.style.borderColor = 'green';
+        msgPassword.innerHTML = '&#10004;';
+        msgPassword.style.color = 'green';
+        indexSend++;
+    }
+
+    if (indexSend === 2) {
+        console.log('Данные формы отправлены');
+    }
+})
