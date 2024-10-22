@@ -18,58 +18,51 @@ function createForm() {
     const passwordError = document.createElement('span');
     const btn = document.createElement('button');
 
+    form.classList.add('my-form');
+    btn.style.cssText = `
+    padding: 10px 20px;
+    width: fit-content;
+    margin: 0 auto;
+    `;
+
     labelName.setAttribute('for', 'fullName');
     labelName.innerText = 'Введиет ФИО: ';
-    labelName.style.display = 'block';
     nameInput.type = 'text';
     nameInput.name = 'fullName';
     nameInput.id = 'fullName';
-    nameInput.placeholder = 'Введите ФИО';
+    nameInput.placeholder = 'Иванов Иван';
     // nameInput.required = true;
     // nameInput.minLength = 3;
 
     labelPhone.setAttribute('for', 'phone');
     labelPhone.innerText = 'Введите телефон: ';
-    labelPhone.style.display = 'block';
     phoneInput.type = 'tel';
     phoneInput.name = 'phone';
     phoneInput.id = 'phone';
-    // phoneInput.pattern = '+[0-9]{3}([0-9]{2}) [0-9]{3}-[0-9]{2}-[0-9]{2}';
-    // phoneInput.required = true;
-    // phoneInput.minLength = 3;
-    // phoneInput.maxLength = 18;
     phoneInput.placeholder = '+375(29) 111-11-11';
 
     labelEmail.setAttribute('for', 'email');
     labelEmail.innerText = 'Введите E-mail: ';
-    labelEmail.style.display = 'block';
     emailInput.type = 'email';
     emailInput.name = 'email';
     emailInput.id = 'email';
-    // emailInput.pattern = '/[a-zA-Z]+@[a-zA-Z]{2,5}+\.[a-zA-Z]{2,4}/$';
-    emailInput.pattern = '/[a-zA-Z0-9._%+-]{3,}+@[a-zA-Z0-9.-]{3,}+\.[a-zA-Z]{2,4}/';
     emailInput.placeholder = 'abc@abc.abc';
 
     labelBirth.setAttribute('for', 'bdate');
     labelBirth.innerText = 'Дата рожедения: ';
-    labelBirth.style.display = 'block';
     birthInput.type = 'date';
     birthInput.name = 'bdate';
     birthInput.id = 'bdate';
 
     labelPassword.setAttribute('for', 'password');
     labelPassword.innerText = 'Ваш пароль: ';
-    labelPassword.style.display = 'block';
     passwordInput.type = 'password';
     passwordInput.name = 'password';
     passwordInput.id = 'password';
-    passwordInput.placeholder = 'Password';
-    // passwordInput.required = true;
-    // passwordInput.minLength = 8;
+    passwordInput.placeholder = 'Пароль';
 
     btn.type = 'submit';
-    btn.innerText = 'Отправить'
-
+    btn.innerText = 'Отправить';
 
     labelName.appendChild(nameInput);
     labelName.appendChild(nameError);
@@ -93,36 +86,80 @@ function createForm() {
 
     form.appendChild(btn);
 
-    root.appendChild(form)
+    root.appendChild(form);
 
     const regexpPhone = /\+(\d){3}\((\d){2}\) (\d){3}\-(\d){2}\-(\d){2}/;
+    const regexEmail = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z]{2,4})/;
+    const regexPassword = /(?=.*[0-9])(?=.*[!@#$%^&*.+-])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*.+-]{8,}/g;
+
 
     form.addEventListener('submit', event => {
+        let readyIndex = 0;
         event.preventDefault();
 
         if (nameInput.value.trim().length < 3) {
+            nameError.style.color = '#ff3f3f';
             nameError.innerText = 'Имя слишком короткое';
         } else {
-            nameError.innerText = '';
+            nameError.innerHTML = '&#10004;';
+            nameError.style.color = 'green';
+            readyIndex++;
         }
 
         if (phoneInput.value.trim().length < 3) {
+            phoneError.style.color = '#ff3f3f';
             phoneError.innerText = 'Телефон не может быть короче 3-х символов';
         } else if (phoneInput.value.trim().length > 18) {
+            phoneError.style.color = '#ff3f3f';
             phoneError.innerText = 'Телефон не может быть длинее 18 символов';
-        } else if (!phoneInput.value.match(regexpPhone)) {
-            // !regexpPhone.test(phoneInput.value)
-            console.log(phoneInput.value);
+        } else if (!phoneInput.value.trim().match(regexpPhone)) {
+            phoneError.style.color = '#ff3f3f';
             phoneError.innerText = 'Телефон введен не верно';
         } else {
-            console.log('Все ок!');
-            phoneError.innerHTML = '';
+            phoneError.innerHTML = '&#10004;';
+            phoneError.style.color = 'green';
+            readyIndex++;
         }
 
-        // if (!emailInput.pattern)
-        console.log(emailInput);
+        if (!emailInput.value.trim().match(regexEmail)) {
+            emailError.style.color = '#ff3f3f';
+            emailError.innerText = 'Не верный формат электронной почты'
+        } else {
+            emailError.innerHTML = '&#10004;';
+            emailError.style.color = 'green';
+            readyIndex++;
+        }
 
-    })
+        if (birthInput.value > "01.01.1930") {
+            birthError.innerHTML = '&#10004;';
+            birthError.style.color = 'green';
+            readyIndex++;
+        } else {
+            birthError.style.color = '#ff3f3f';
+            birthError.textContent = 'Дата не указана';
+        }
+
+        if (passwordInput.value.trim().length < 8) {
+            passwordError.style.color = '#ff3f3f';
+            passwordError.textContent = 'Нужно минимум 8 символов';
+        } else if (!passwordInput.value.trim().match(regexPassword)) {
+            passwordError.style.color = '#ff3f3f';
+            passwordError.textContent = 'Не верный формат пароля';
+        } else {
+            passwordError.innerHTML = '&#10004;';
+            passwordError.style.color = 'green';
+            readyIndex++;
+        }
+        if (readyIndex === 5) {
+            console.log({
+                name: nameInput.value.trim(),
+                phone: phoneInput.value.trim(),
+                email: emailInput.value.trim(),
+                birthday: birthInput.value,
+                password: 'OK'
+            });
+        }
+    });
 }
 
 createForm();

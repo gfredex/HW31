@@ -4,5 +4,12 @@
 
 span {
     margin-left: 20px;
-    color: #ff3f3f;
+}
+
+.my-form {
+    width: fit-content;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
