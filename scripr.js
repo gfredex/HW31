@@ -158,8 +158,48 @@ function createForm() {
                 birthday: birthInput.value,
                 password: 'OK'
             });
+        } else {
+            console.log('Не все поля заполненны корректно');
         }
     });
 }
 
 createForm();
+
+class MyButton extends HTMLElement {
+    constructor() {
+        super();
+        this.attachShadow({ mode: 'open' });
+
+        this.shadowRoot.innerHTML = `
+        <style>
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            border-radius: 7px;
+            border: none;
+            background-color: #333;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            }
+        </style>
+        <button></button>
+            `;
+    }
+
+    connectedCallback() {
+        this.render();
+    }
+
+    render() {
+        const btn = this.shadowRoot.querySelector('button');
+        const text = this.getAttribute('text') || 'Кнопка';
+        btn.textContent = text;
+        const bgColor = this.getAttribute('background');
+        btn.style.backgroundColor = bgColor;
+        const color = this.getAttribute('color');
+        btn.style.color = color;
+    }
+}
+customElements.define('my-button', MyButton);
